@@ -1,51 +1,24 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import EventsExample from './components/EventsExample';
-import List from './components/List';
-import TodoItem from './components/TodoItem';
-import UserItem from './components/UserItem';
-import { ITodo, IUser } from './types/types';
+import React from 'react';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import TodoPage from './pages/TodoPage';
+import UserPage from './pages/UserPage';
+
+
 
 function App() {
 
-   const [users, setUsers] = useState<IUser[]>([]);
-   const [todos, setTodos] = useState<ITodo[]>([]);
-
-   useEffect(() => {
-      fetchUsers();
-      fetchTodos();
-   }, []);
-
-   async function fetchUsers() {
-      try {
-         const response = await axios.get<IUser[]>('https://jsonplaceholder.typicode.com/users');
-         setUsers(response.data);
-      } catch (e) {
-         alert(e);
-      }
-   }
-
-   async function fetchTodos() {
-      try {
-         const response = await axios.get<ITodo[]>('http://jsonplaceholder.typicode.com/todos?_limit=10');
-         setTodos(response.data);
-      } catch (e) {
-         alert(e);
-      }
-   }
 
    return (
-      <div className="App">
-         <EventsExample />
-         <List
-            items={users}
-            renderItem={(user: IUser) => <UserItem user={user} key={user.id} />}
-         />
-         <List
-            items={todos}
-            renderItem={(todo: ITodo) => <TodoItem todo={todo} key={todo.id} />}
-         />
-      </div>
+      <BrowserRouter>
+         <div>
+            <Link to='/users'>Users</Link>
+            <Link to='/todos'>Todos</Link>
+         </div>
+         <Routes>
+            <Route path='/users' element={<UserPage />} />
+            <Route path='/todos' element={<TodoPage />} />
+         </Routes>
+      </BrowserRouter>
    );
 }
 
